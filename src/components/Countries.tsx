@@ -56,7 +56,7 @@ const Countries = () => {
 			</div>
 			<div
 				className={`${
-					countries.length === 0 ? 'h-screen' : ''
+					countries.length < 5 ? 'h-screen' : ''
 				} grid py-4 grid-cols-4 gap-12 w-[70%] mx-auto`}
 			>
 				{countries.map(
@@ -72,7 +72,7 @@ const Countries = () => {
 							to={`${name.common}`}
 							className={`${
 								darkMode ? 'bg-slate-800' : 'bg-white'
-							} w-full shadow-lg flex flex-col gap-4`}
+							} w-full h-[280px] shadow-lg flex flex-col gap-4`}
 							key={index}
 						>
 							<img
