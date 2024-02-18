@@ -5,8 +5,7 @@ export const store = configureStore({
 	reducer: {
 		countries: countriesSlice,
 		country: countriesSlice,
-		filteredCountries: countriesSlice,
-		selectedRegion: countriesSlice,
+		darkmode: countriesSlice,
 	},
 })
 

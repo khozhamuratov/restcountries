@@ -1,21 +1,18 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useAppSelector } from '../app/hooks'
-import { CountryInterface } from '../types/interface'
-import FilteredCountries from './FilteredCountries'
+import { updateCountries } from '../features/countries/countriesSlice'
+import { CountriesInterface } from '../types/interface'
 
 const Countries = () => {
 	const [inputValue, setInputValue] = useState<string>('')
-	const [countryData, setCountryData] = useState<CountryInterface | null>(null)
+	const { darkMode } = useAppSelector(select => select.darkmode)
+	const dispatch = useDispatch()
 	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setInputValue(event.target.value)
 	}
 	const { countries } = useAppSelector(select => select.countries)
-	const { selectedRegion } = useAppSelector(select => select.selectedRegion)
-	const { filteredCountries } = useAppSelector(
-		select => select.filteredCountries
-	)
-
 	const searchCountry = async () => {
 		try {
 			const response = await fetch(
@@ -23,26 +20,9 @@ const Countries = () => {
 			)
 			const data = await response.json()
 			if (data && data.length > 0) {
-				const {
-					name,
-					capital,
-					population,
-					flags,
-					subregion,
-					region,
-					topLevelDomain,
-				} = data[0]
-				setCountryData({
-					name,
-					capital,
-					population,
-					flags,
-					subregion,
-					region,
-					topLevelDomain,
-				})
+				dispatch(updateCountries(data))
 			} else {
-				setCountryData(null)
+				dispatch(updateCountries([]))
 			}
 		} catch (error) {
 			console.error(error)
@@ -62,62 +42,54 @@ const Countries = () => {
 					<input
 						type='text'
 						value={inputValue}
-						placeholder='Search country'
-						className='border px-4 py-2 border-r-0 outline-none rounded-l-md'
+						placeholder='Поиск страны'
+						className='border text-black px-4 py-2 border-r-0 outline-none rounded-l-md'
 						onChange={handleInputChange}
 					/>
 					<button
-						className='border py-2 border-l-0 rounded-r-md px-2'
+						className='border py-2 border-l-0 rounded-r-md px-2 bg-white text-black'
 						onClick={searchCountry}
 					>
-						Search
+						Поиск...
 					</button>
 				</form>
-				<FilteredCountries />
 			</div>
-			<div className='grid grid-cols-4 gap-12 w-[70%] mx-auto'>
-				{countryData && (
-					<Link
-						to={`${countryData.name.common}`}
-						className='w-full shadow-lg flex flex-col gap-4'
-						key={countryData.population}
-					>
-						<img
-							className='w-[350px] h-[120px]'
-							src={countryData.flags?.png || countryData.flags?.svg}
-						/>
-						<div className='flex m-4 flex-col gap-5'>
-							<h1 className='text-[18px] font-bold'>
-								{countryData.name.common}
-							</h1>
-							<div className='flex text-[12px] flex-col'>
-								<span>Население: {countryData.population}</span>
-								<span>Регион: {countryData.region}</span>
-								<span>Столица: {countryData.capital}</span>
+			<div
+				className={`${
+					countries.length === 0 ? 'h-screen' : ''
+				} grid py-4 grid-cols-4 gap-12 w-[70%] mx-auto`}
+			>
+				{countries.map(
+					({
+						name,
+						population,
+						flags,
+						region,
+						capital,
+						index,
+					}: CountriesInterface) => (
+						<Link
+							to={`${name.common}`}
+							className={`${
+								darkMode ? 'bg-slate-800' : 'bg-white'
+							} w-full shadow-lg flex flex-col gap-4`}
+							key={index}
+						>
+							<img
+								className='w-[350px] h-[120px]'
+								src={flags?.png || flags?.svg}
+							/>
+							<div className='flex m-4 flex-col gap-5'>
+								<h1 className='text-[18px] font-bold'>{name.common}</h1>
+								<div className='flex text-[12px] flex-col'>
+									<span>Население: {population}</span>
+									<span>Регион: {region}</span>
+									<span>Столица: {capital}</span>
+								</div>
 							</div>
-						</div>
-					</Link>
+						</Link>
+					)
 				)}
-				{countries.map(item => (
-					<Link
-						to={`${item.name.common}`}
-						className='w-full shadow-lg flex flex-col gap-4'
-						key={item.population}
-					>
-						<img
-							className='w-[350px] h-[120px]'
-							src={item.flags?.png || item.flags?.svg}
-						/>
-						<div className='flex m-4 flex-col gap-5'>
-							<h1 className='text-[18px] font-bold'>{item.name.common}</h1>
-							<div className='flex text-[12px] flex-col'>
-								<span>Население: {item.population}</span>
-								<span>Регион: {item.region}</span>
-								<span>Столица: {item.capital}</span>
-							</div>
-						</div>
-					</Link>
-				))}
 			</div>
 		</>
 	)

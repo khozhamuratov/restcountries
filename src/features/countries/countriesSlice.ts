@@ -5,8 +5,7 @@ import { fetchAllCountries } from './countriesActions'
 interface CountriesState {
 	countries: []
 	country: CountryInterface
-	filteredCountries: []
-	selectedRegion: string
+	darkMode: boolean
 }
 
 const initialState: CountriesState = {
@@ -22,8 +21,7 @@ const initialState: CountriesState = {
 		currencies: [{ name: '' }],
 		languages: [{ name: '' }],
 	},
-	filteredCountries: [],
-	selectedRegion: 'all',
+	darkMode: false,
 }
 
 export const countriesSlice = createSlice({
@@ -33,8 +31,11 @@ export const countriesSlice = createSlice({
 		countryData: (state, action) => {
 			state.country = action.payload
 		},
-		filterCountries: (state, action) => {
-			state.filteredCountries = []
+		updateCountries: (state, action) => {
+			state.countries = action.payload
+		},
+		changeTheme: state => {
+			state.darkMode = !state.darkMode
 		},
 	},
 	extraReducers: builder => {
@@ -48,5 +49,6 @@ export const countriesSlice = createSlice({
 	},
 })
 
-export const { countryData, filterCountries } = countriesSlice.actions
+export const { countryData, updateCountries, changeTheme } =
+	countriesSlice.actions
 export default countriesSlice.reducer

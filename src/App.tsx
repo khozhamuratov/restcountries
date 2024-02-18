@@ -8,7 +8,7 @@ import { fetchAllCountries } from './features/countries/countriesActions'
 import Layout from './layout/layout'
 
 const App = () => {
-	const {} = useAppSelector(selector => selector.countries)
+	const { darkMode } = useAppSelector(selector => selector.darkmode)
 	const dispatch = useAppDispatch()
 
 	useEffect(() => {
@@ -16,7 +16,7 @@ const App = () => {
 	}, [])
 
 	return (
-		<>
+		<main className={`${darkMode ? 'bg-slate-900 text-white' : 'bg-white'}`}>
 			<div className='flex flex-col'>
 				<Header />
 			</div>
@@ -28,7 +28,7 @@ const App = () => {
 					</Route>
 				</Routes>
 			</div>
-		</>
+		</main>
 	)
 }
 

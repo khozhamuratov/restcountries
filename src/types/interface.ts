@@ -1,5 +1,7 @@
 export interface CountriesInterface {
-	name: string
+	name: {
+		common: string
+	}
 	population: string
 	region: string
 	capital: string

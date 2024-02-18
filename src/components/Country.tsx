@@ -43,7 +43,7 @@ const Country = () => {
 	}, [fetchCountryData, name])
 
 	return (
-		<div className='flex flex-col items-center justify-center w-full h-[80vh]'>
+		<div className='flex flex-col items-center justify-center w-full h-[633px]'>
 			<Link
 				className='relative right-[400px] bottom-[50px] px-4 border rounded-md hover:bg-slate-300'
 				to={'/'}
@@ -57,7 +57,7 @@ const Country = () => {
 				<div className='flex flex-col'>
 					<h1 className='text-[20px] font-bold italic'>{country.nativeName}</h1>
 					<div>
-						<div className='grid text-[16px] font-bold grid-cols-2 grid-rows-5'>
+						<div className='flex flex-col text-[16px] font-bold '>
 							<p>
 								Название:{' '}
 								<span className=' font-normal'>{country.nativeName}</span>
@@ -94,12 +94,13 @@ const Country = () => {
 							</p>
 						</div>
 					</div>
-					<div className='flex gap-2 items-center justify-center'>
+					<div className='w-[500px] flex-wrap flex gap-2 items-center justify-center'>
 						<p>Приграничные страны:</p>
 						{borderCountries.map(item => (
 							<Link
-								className='px-2 bg-slate-200 border rounded-md shadow-lg text-nowrap text-[12px]'
+								className='text-black hover:bg-slate-300 px-2 bg-slate-200 border rounded-md shadow-lg text-nowrap text-[12px]'
 								to={`/${item}`}
+								key={item}
 							>
 								{item}
 							</Link>

@@ -1,5 +1,7 @@
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
-import { useAppDispatch, useAppSelector } from '../app/hooks'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { updateCountries } from '../features/countries/countriesSlice'
 
 const regions = [
 	{
@@ -28,30 +30,27 @@ const regions = [
 	},
 ]
 
-const FilteredCountries = () => {
-	let { selectedRegion } = useAppSelector(select => select.selectedRegion)
-	let { countries } = useAppSelector(select => select.countries)
-	let { filteredCountries } = useAppSelector(select => select.filteredCountries)
-	const dispatch = useAppDispatch()
+const FilterCountries = () => {
+	const dispatch = useDispatch()
+	const [selectedRegionName, setSelectedRegionName] = useState<string>('all')
 	const fetchRegion = async (regionName: string) => {
-		selectedRegion = regionName
-		console.log(regionName)
-
-		if (selectedRegion === 'all') {
+		setSelectedRegionName(regionName)
+		if (regionName === 'all') {
 			const res = await fetch('https://restcountries.com/v3.1/all')
-			countries = await res.json()
+			const response = await res.json()
+			dispatch(updateCountries(response))
 		} else {
 			const res = await fetch(
-				`https://restcountries.com/v3.1/region/${selectedRegion}`
+				`https://restcountries.com/v3.1/region/${regionName}`
 			)
-			filteredCountries = await res.json()
-			console.log(filteredCountries)
+			const response = await res.json()
+			dispatch(updateCountries(response))
 		}
 	}
 	return (
-		<FormControl sx={{ m: 1, minWidth: 120 }} size='small'>
+		<FormControl variant='outlined' sx={{ m: 1, minWidth: 120 }} size='small'>
 			<InputLabel>Region</InputLabel>
-			<Select label='Region' value={selectedRegion}>
+			<Select label='Region' value={selectedRegionName}>
 				{regions.map(item => (
 					<MenuItem
 						onClick={() => fetchRegion(item.name)}
@@ -66,4 +65,4 @@ const FilteredCountries = () => {
 	)
 }
 
-export default FilteredCountries
+export default FilterCountries
