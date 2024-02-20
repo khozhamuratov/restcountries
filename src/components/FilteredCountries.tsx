@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import { FormControl, MenuItem, Select } from '@mui/material'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { updateCountries } from '../features/countries/countriesSlice'
@@ -48,9 +48,13 @@ const FilterCountries = () => {
 		}
 	}
 	return (
-		<FormControl variant='outlined' sx={{ m: 1, minWidth: 120 }} size='small'>
-			<InputLabel>Region</InputLabel>
-			<Select label='Region' value={selectedRegionName}>
+		<FormControl
+			style={{ background: 'white', borderRadius: 5 }}
+			variant='outlined'
+			sx={{ m: 1, minWidth: 120 }}
+			size='small'
+		>
+			<Select displayEmpty value={selectedRegionName}>
 				{regions.map(item => (
 					<MenuItem
 						onClick={() => fetchRegion(item.name)}

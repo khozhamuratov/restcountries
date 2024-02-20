@@ -57,7 +57,7 @@ const Countries = () => {
 			<div
 				className={`${
 					countries.length < 5 ? 'h-screen' : ''
-				} grid py-4 grid-cols-4 gap-12 w-[70%] mx-auto`}
+				} grid grid-cols-4 max-[720px]:grid-cols-2 max-[990px]:grid-cols-3 max-[520px]:grid-cols-1 py-4 gap-12 w-[70%] mx-auto`}
 			>
 				{countries.map(
 					({
